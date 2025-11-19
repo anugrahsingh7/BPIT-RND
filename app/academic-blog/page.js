@@ -1,3 +1,9 @@
+"use client";
+
+import { useRef } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Card from "@/components/ui/skiper-ui/blogcard";
+
 export default function AcademicBlogPage() {
   const blogPosts = [
     {
@@ -20,8 +26,32 @@ export default function AcademicBlogPage() {
       date: "February 20, 2024",
       excerpt: "Recent breakthroughs in materials science and their applications in various engineering domains.",
       category: "Research"
+    },
+    {
+      title: "Advances in Robotics",
+      author: "Dr. Emily Davis",
+      date: "January 15, 2024",
+      excerpt: "Modern robotics trends shaping automation and precision engineering.",
+      category: "Automation"
+    },
+    {
+      title: "Data-Driven Infrastructure",
+      author: "Dr. Michael Lee",
+      date: "December 10, 2023",
+      excerpt: "Leveraging data analytics to design resilient urban systems.",
+      category: "Analytics"
     }
   ];
+
+  const trackRef = useRef(null);
+
+  const scrollByCards = (direction) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const cardWidth = 320 + 16;
+    const amount = direction === "left" ? -cardWidth * 2 : cardWidth * 2;
+    track.scrollBy({ left: amount, behavior: "smooth" });
+  };
 
   return (
     <div className="min-h-screen pt-16 bg-black">
@@ -35,29 +65,46 @@ export default function AcademicBlogPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogPosts.map((post, index) => (
-            <article
-              key={index}
-              className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300"
+        <div className="relative">
+          <div className="pointer-events-none absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-black to-transparent" />
+          <div className="pointer-events-none absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-black to-transparent" />
+
+          <div
+            ref={trackRef}
+            className="scroll-smooth overflow-x-auto no-scrollbar snap-x snap-mandatory flex gap-10 py-2"
+          >
+            {blogPosts.map((post, index) => (
+              <div key={index} className="snap-start">
+                <Card
+                  title={post.title}
+                  excerpt={post.excerpt}
+                  category={post.category}
+                  author={post.author}
+                  date={post.date}
+                  image={post.image}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="absolute inset-y-0 left-0 flex items-center">
+            <button
+              aria-label="Scroll left"
+              onClick={() => scrollByCards("left")}
+              className="m-2 rounded-full border border-white/20 bg-white/10 p-2 text-white backdrop-blur-md transition-colors hover:bg-white/20"
             >
-              <div className="mb-4">
-                <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-[#e71329] rounded-full text-xs font-medium">
-                  {post.category}
-                </span>
-              </div>
-              <h2 className="text-xl font-semibold text-white mb-3">
-                {post.title}
-              </h2>
-              <p className="text-gray-300 mb-4 line-clamp-3">
-                {post.excerpt}
-              </p>
-              <div className="flex items-center justify-between text-sm text-gray-400">
-                <span>{post.author}</span>
-                <span>{post.date}</span>
-              </div>
-            </article>
-          ))}
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+          </div>
+          <div className="absolute inset-y-0 right-0 flex items-center">
+            <button
+              aria-label="Scroll right"
+              onClick={() => scrollByCards("right")}
+              className="m-2 rounded-full border border-white/20 bg-white/10 p-2 text-white backdrop-blur-md transition-colors hover:bg-white/20"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
