@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { heroAnimationData, heroFloatingIcons } from './data';
 import { IconRenderer } from './iconMap';
-
+import Image from 'next/image';
 export default function HeroSection() {
   const heroRef = useRef(null);
   const buttonsRef = useRef(null);
@@ -97,7 +97,14 @@ export default function HeroSection() {
             transition={{ duration: 1, ease: 'easeOut' }}
             className="relative z-10 rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl"
           >
-            <Lottie animationData={heroAnimationData} loop autoplay className="h-[360px] w-full" />
+            {/* <Lottie animationData={heroAnimationData} loop autoplay className="h-[360px] w-full" /> */}
+            <Image
+              src="/rnd-image.png"
+              alt="R&D Illustration"
+              width={600}
+              height={400}
+              className="h-[360px] w-full rounded-2xl object-cover opacity-75"
+            />
           </motion.div>
           {heroFloatingIcons.map((icon, idx) => (
             <motion.div

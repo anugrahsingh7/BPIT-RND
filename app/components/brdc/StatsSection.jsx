@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { motion, useAnimation, useInView } from 'framer-motion';
+import { motion, useAnimation, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
 import SectionHeading from './SectionHeading';
 import { statsCards } from './data';
 import { IconRenderer } from './iconMap';
@@ -26,13 +26,6 @@ export default function StatsSection() {
 const StatCard = ({ card, delay }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.6 });
-  const controls = useAnimation();
-
-  useEffect(() => {
-    if (inView) {
-      controls.start({ count: card.value, transition: { duration: 2, ease: 'easeOut' } });
-    }
-  }, [inView, controls, card.value]);
 
   return (
     <motion.div
@@ -44,21 +37,29 @@ const StatCard = ({ card, delay }) => {
       transition={{ delay, duration: 0.6, ease: 'easeOut' }}
     >
       <IconRenderer name={card.icon} className="h-8 w-8 text-sky-200" />
-      <AnimatedNumber controls={controls} suffix={card.suffix} />
+      <AnimatedNumber value={inView ? card.value : 0} suffix={card.suffix} />
       <p className="text-sm text-gray-300">{card.label}</p>
     </motion.div>
   );
 };
 
-const AnimatedNumber = ({ controls, suffix }) => {
+const AnimatedNumber = ({ value, suffix }) => {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, latest => Math.round(latest));
+
+  useEffect(() => {
+    const controls = animate(count, value, {
+      duration: 2,
+      ease: 'easeOut'
+    });
+    return () => controls.stop();
+  }, [value, count]);
+
   return (
-    <motion.span
-      className="my-4 block text-4xl font-semibold"
-      animate={controls}
-      initial={{ count: 0 }}
-    >
-      {({ count }) => `${Math.round(count)}${suffix || ''}`}
-    </motion.span>
+    <motion.div className="my-4 block text-4xl font-semibold">
+      <motion.span>{rounded}</motion.span>
+      <span>{suffix || ''}</span>
+    </motion.div>
   );
 };
 
