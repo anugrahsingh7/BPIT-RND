@@ -1,0 +1,68 @@
+import {
+  Atom,
+  BadgeIndianRupee,
+  BellRing,
+  BookOpen,
+  Bot,
+  Brain,
+  Briefcase,
+  CalendarDays,
+  CircuitBoard,
+  Cloud,
+  Cpu,
+  FileCheck2,
+  FlaskConical,
+  Flower2,
+  KeyRound,
+  Layers,
+  Link2,
+  PencilLine,
+  Radio,
+  ScrollText,
+  Shield,
+  ShieldAlert,
+  Sparkles,
+  Target,
+  Telescope,
+  Users,
+  Wallet,
+  Waves,
+} from 'lucide-react';
+
+export const icons = {
+  target: Target,
+  sparkles: Sparkles,
+  link: Link2,
+  shield: Shield,
+  cpu: Cpu,
+  wallet: Wallet,
+  briefcase: Briefcase,
+  fileCheck: FileCheck2,
+  brain: Brain,
+  waves: Waves,
+  shieldAlert: ShieldAlert,
+  radio: Radio,
+  bot: Bot,
+  cloud: Cloud,
+  circuitBoard: CircuitBoard,
+  flaskConical: FlaskConical,
+  atom: Atom,
+  telescope: Telescope,
+  layers: Layers,
+  scroll: ScrollText,
+  badgeIndianRupee: BadgeIndianRupee,
+  users: Users,
+  bookOpen: BookOpen,
+  keyRound: KeyRound,
+  flower2: Flower2,
+  bellRing: BellRing,
+  calendar: CalendarDays,
+  pencilLine: PencilLine,
+};
+
+export const IconRenderer = ({ name, className = 'w-6 h-6 text-white' }) => {
+  const IconComponent = icons[name] || Sparkles;
+  return <IconComponent className={className} />;
+};
+
+
